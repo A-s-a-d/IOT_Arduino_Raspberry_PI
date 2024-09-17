@@ -1,1 +1,2 @@
-# BUT3-S5-ESE-R5-10-ESE-Syst-me-Embarqu-Internet-Des-Objets-version-UnoR4-WiFi
+# unoR4Template
+Projet sous Visual Studio Code pour la carte UnoR4-WiFi
