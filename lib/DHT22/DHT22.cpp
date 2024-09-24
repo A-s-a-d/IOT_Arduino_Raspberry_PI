@@ -56,9 +56,11 @@ DHT_STATUS DHT22::readValues()
 
 float DHT22::getTemperature()
 {
+    return _temperature;
 }
 float DHT22::getHumidity()
 {
+    return _humidity;
 }
 float DHT22::getDewPoint()
 {

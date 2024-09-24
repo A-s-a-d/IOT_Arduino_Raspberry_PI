@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "Ticker.h"
+#include "DHT22.h"
 
 // const
 #define LED_R 3
@@ -12,12 +13,9 @@ const uint8_t DHT_PIN = 7;
 
 // prototypes
 void action();
-void DHT_begin();
-DHT_STATUS DHT_startConversion();
-uint8_t DHT_readbyte();
-DHT_STATUS DHT_readValues();
 
 // obj
+DHT22 dht22;
 Ticker timer4(action, actionPeriod);
 
 //************
@@ -28,7 +26,7 @@ void setup()
   digitalWrite(LED_G, 0);
   digitalWrite(LED_R, 1);
   Serial.begin(115200);
-  DHT_begin();
+  dht22.begin(DHT_PIN);
   timer4.start();
 }
 
@@ -45,32 +43,13 @@ void action()
   digitalWrite(LED_G, !digitalRead(LED_G));
   digitalWrite(LED_R, !digitalRead(LED_R));
 
-  DHT_STATUS status = DHT_readValues();
-  if (status == DHT_OK)
-  {
-    Serial.print("temperature : ");
-    Serial.println(temperature, 2);
-    Serial.print("humidity : ");
-    Serial.println(humidity, 2);
-  }
+  Serial.print("temperature : ");
+  Serial.println(dht22.getTemperature(), 2);
+  Serial.print("humidity : ");
+  Serial.println(dht22.getHumidity(), 2);
 
   // uint8_t res;
   // res = DHT_startConversion();
   // Serial.println(res, DEC);
 }
 
-void DHT_begin()
-{
-}
-
-DHT_STATUS DHT_startConversion()
-{
-}
-
-uint8_t DHT_readbyte()
-{
-}
-
-DHT_STATUS DHT_readValues()
-{
-}
