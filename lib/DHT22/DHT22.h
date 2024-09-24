@@ -28,6 +28,8 @@ private:
     float _temperature;
     float _humidity;
     float _dewPoint;
+    float _a;
+    float _b;
 };
 
 #endif

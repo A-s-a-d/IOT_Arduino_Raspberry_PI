@@ -6,11 +6,13 @@ DHT22::DHT22()
     _temperature = 0;
     _humidity = 0;
     _dewPoint = 0;
+    _a = 17.27; // On initialise dans le constructeur les constantes a et b pour calculer le point de rosée (Dewpoint)
+    _b = 237.7;
 }
 
 void DHT22::begin(uint8_t dhtPin)
 {
-    dhtPin = _pin;
+    _pin = dhtPin;
     pinMode(_pin, INPUT);
     delay(2000);
 }
@@ -28,7 +30,6 @@ DHT_STATUS DHT22::readValues()
     DHT_STATUS status = DHT_OK;
 
     status = _startConversion();
-
     if (status == 0)
     {
         hum_upper = _readByte();
@@ -64,12 +65,14 @@ float DHT22::getHumidity()
 }
 float DHT22::getDewPoint()
 {
+    _dewPoint = _readDewPoint(_temperature, _humidity);
+    return _dewPoint;
 }
 
 DHT_STATUS DHT22::_startConversion()
 {
     // var loc
-    DHT_STATUS status;
+    DHT_STATUS status = DHT_OK;
     // uc output signal
     pinMode(_pin, OUTPUT);
     digitalWrite(_pin, 0);
@@ -79,37 +82,30 @@ DHT_STATUS DHT22::_startConversion()
 
     // en mode entree
     pinMode(_pin, INPUT);
-    bool test;
-    // verification 0
     delayMicroseconds(40);
-    test = digitalRead(_pin);
-    uint32_t now = millis();
-    if (test == 1)
+
+    if (digitalRead(_pin) == 0)
     {
-        status = DHT_ERROR_RESPONSE;
-        if (millis() - now > 20)
+        delayMicroseconds(80);
+        if (digitalRead(_pin) == 1)
         {
-            return DHT_ERROR_TIMEOUT;
+            status = DHT_OK;
         }
         else
         {
-            return DHT_ERROR_RESPONSE;
+            status = DHT_ERROR_RESPONSE;
         }
     }
-    else
+    // verification 1
+    uint32_t now = millis();
+    while (digitalRead(_pin) == 1)
     {
-        // verification 1
-        delayMicroseconds(80);
-        test = digitalRead(_pin);
-        if (test == 0)
+        if ((millis() - now) > 20)
         {
-            return DHT_ERROR_RESPONSE;
-        }
-        while (digitalRead(_pin) == 1)
-        {
+            return DHT_ERROR_TIMEOUT;
         }
     }
-    return DHT_OK;
+    return status;
 }
 
 uint8_t DHT22::_readByte()
@@ -134,4 +130,17 @@ uint8_t DHT22::_readByte()
 
 float DHT22::_readDewPoint(float temp, float hum)
 {
+    float psy = 0;
+    float res = 0;
+    if ((temp > 0 && temp < 60) && (hum > 0 && hum < 100))
+    {
+        psy = ((_a * temp) / (_b + temp));
+        psy = psy + log(hum / 100.0);
+        res = (_b * psy) / (_a - psy);
+    }
+    else
+    {
+        res = -1;
+    }
+    return res;
 }
