@@ -27,6 +27,7 @@ DHT_STATUS DHT22::readValues()
     uint8_t operation = 0x00;
     uint16_t temp = 0x0000;
     uint16_t hum = 0x0000;
+
     DHT_STATUS status = DHT_OK;
 
     status = _startConversion();
@@ -37,21 +38,23 @@ DHT_STATUS DHT22::readValues()
         temp_upper = _readByte();
         temp_lower = _readByte();
         checksum = _readByte();
-    }
-    operation = hum_upper + hum_lower + temp_upper + temp_lower;
 
-    if (operation == checksum)
-    {
-        status = DHT_OK;
-        hum = (hum_upper << 8) | hum_lower;
-        temp = (temp_upper << 8) | temp_lower;
-        _temperature = temp / 10.0;
-        _humidity = hum / 10.0;
+        operation = hum_upper + hum_lower + temp_upper + temp_lower;
+
+        if (operation == checksum)
+        {
+            status = DHT_OK;
+            hum = (hum_upper << 8) | hum_lower;
+            temp = (temp_upper << 8) | temp_lower;
+            _temperature = temp / 10.0;
+            _humidity = hum / 10.0;
+        }
+        else
+        {
+            status = DHT_ERROR_CHECK_SUM;
+        }
     }
-    else
-    {
-        return DHT_ERROR_CHECK_SUM;
-    }
+
     return status;
 }
 
