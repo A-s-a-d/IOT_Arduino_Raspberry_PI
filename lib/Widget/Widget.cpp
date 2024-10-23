@@ -110,21 +110,21 @@ void Gauge_LUX ::_drawBackground()
     _canvas->setCursor(43, 0);
     _canvas->setTextSize(1);
     _canvas->setTextColor(WHITE);
-    _canvas->print("LUMIERE");
+    _canvas->print("Dewpoint");
 
     _canvas->drawRect(9, 10, 110, 15, WHITE);
 
     _canvas->setRotation(1);
-    for (int i = 0; i <= 3000; i += 300)
+    for (int i = 0; i <= 50; i += 5)
     {
 
-        _canvas->setCursor(28, 116 - (11 * (i / 300)));
+        _canvas->setCursor(28, 116 - (11 * (i / 5)));
         // Position verticale ajustée pour chaque itération       
         _canvas->setTextSize(1);
         _canvas->print(String(i)); // Conversion de l'entier en chaîne de caractères pour l'affichage       
-        if (i < 3000)
+        if (i < 50)
         {
-            _canvas->drawLine(10, 118 - (11 * (i / 300)), 24, 118 - (11 * (i / 300)), WHITE);
+            _canvas->drawLine(10, 118 - (11 * (i / 5)), 24, 118 - (11 * (i / 5)), WHITE);
         }
     }
     _canvas->setRotation(0);
@@ -140,7 +140,7 @@ void Gauge_LUX ::draw()
 void Gauge_LUX ::_drawlux()
 {
     float hum = 0;
-    hum = HUMIDITY;
+    hum = DEWPOINT;
 
     int longueur = (index_pixel_lux)*hum;
 
@@ -151,6 +151,7 @@ void Gauge_LUX ::_drawlux()
     _canvas->setTextColor(WHITE);
     _canvas->print(hum);
 }
+
 
 Gauge_hum::Gauge_hum(GFXcanvas1 *pcanvas)
 {
@@ -193,7 +194,7 @@ void Gauge_hum ::draw()
 void Gauge_hum ::_drawhum()
 {
     float dewpoint = 0;
-    dewpoint = DEWPOINT;
+    dewpoint = HUMIDITY;
 
     int longueur = (index_pixel_hum)*dewpoint;
 
