@@ -58,7 +58,7 @@ const char *ssid = "Linksys01370";
 const char *pwd = "3fanq5w4pb";
 
 // mqtt params
-const char *mqtt_server = "192.168.1.125";
+const char *mqtt_server = "192.168.1.186";
 const int MQTT_PORT = 1883;
 const char *mqtt_topic_led = "Uno413/led";
 const char *mqtt_topic_datas = "Uno413/datas";
@@ -263,29 +263,88 @@ void oled_RGB()
     canvas_TFT.setTextDatum(0);
     canvas_TFT.setTextSize(1);
     canvas_TFT.setTextColor(TFT_RED);
-    canvas_TFT.drawString("Temperature", 40, 5, 2);
-    canvas_TFT.pushImage(0, 0, 32, 32, bitmap_temperature);
-    canvas_TFT.fillCircle(30, 118, 20, TFT_WHITE);
-    canvas_TFT.fillRect(15, 34, 30, 92, TFT_WHITE);
-    canvas_TFT.fillRect(17, 36, 26, 88, COLOUR_TEMP);
-    canvas_TFT.fillCircle(30, 118, 17, COLOUR_TEMP);
-    canvas_TFT.fillRect(17, 36, 26, 50 - (int)TEMPERATURE, TFT_BLACK);
+    canvas_TFT.drawString("Temperature", 45, 10, 2);
+    if (TEMPERATURE >= 50)
+    {
+      canvas_TFT.pushImage(96, 96, 32, 32, bitmap_temperature);
+    }
+
+    canvas_TFT.fillCircle(30, 98, 20, TFT_WHITE);
+    canvas_TFT.fillRect(20, 10, 20, 92, TFT_WHITE);   // 15:34:30:92
+    canvas_TFT.fillRect(22, 12, 16, 88, COLOUR_TEMP); // 17+2, 36+2, 16-4, 88-4
+    canvas_TFT.fillCircle(30, 98, 17, COLOUR_TEMP);
+    canvas_TFT.drawSmoothArc(30, 98, 14, 12, 110, 150, TFT_WHITE, TFT_WHITE);
+    canvas_TFT.fillRect(22, 12, 16, 60 - (int)TEMPERATURE, TFT_BLACK);
     canvas_TFT.setTextSize(4);
     canvas_TFT.setTextColor(COLOUR_TEMP);
-    canvas_TFT.drawNumber(TEMPERATURE, 60, 55);
+    canvas_TFT.drawNumber(TEMPERATURE, 50, 45);
 
-    canvas_TFT.drawString("C", 105, 55);
+    canvas_TFT.drawString("C", 100, 45);
     for (uint8_t i = 0; i <= 6; i++)
     {
-      canvas_TFT.drawLine(38, 98 - (i * 10), 44, 98 - (i * 10), TFT_WHITE);
+      if (i == 1)
+      {
+        canvas_TFT.drawLine(30, 82 - (i * 10), 36, 82 - (i * 10), TFT_RED);
+      }
+      else
+      {
+        canvas_TFT.drawLine(33, 82 - (i * 10), 39, 82 - (i * 10), TFT_WHITE);
+      }
     }
 
     condition++;
     break;
   case 1:
+    // int geronimo = 100 + (((int)(3 / 16)) * (int)DEWPOINT);
+    canvas_TFT.fillScreen(TFT_BLACK);
+    canvas_TFT.setTextDatum(0);
+    canvas_TFT.setTextSize(1);
+    canvas_TFT.setTextColor(TFT_RED);
+    canvas_TFT.drawString("Dewpoint", 45, 10, 2);
+    canvas_TFT.drawSmoothArc(64, 90, 57, 20, 97, 263, TFT_WHITE, TFT_BLACK);
+    canvas_TFT.drawSmoothArc(64, 90, 53, 23, 100, 260, TFT_DARKGREY, TFT_DARKGREY);
+    if (DEWPOINT == 0)
+    {
+      canvas_TFT.drawSmoothArc(64, 90, 53, 23, 100, 101, TFT_ORANGE, TFT_ORANGE);
+      canvas_TFT.drawSmoothArc(64, 90, 53, 23, 101, 102, TFT_RED, TFT_RED);
+    }
+    else
+    {
+      canvas_TFT.drawSmoothArc(64, 90, 53, 23, 100, 100 + (DEWPOINT * (int)(160 / 50)), TFT_ORANGE, TFT_ORANGE);
+      canvas_TFT.drawSmoothArc(64, 90, 53, 23, 100 + (DEWPOINT * (int)(160 / 50)), 101 + (DEWPOINT * (int)(160 / 50)), TFT_RED, TFT_RED);
+    }
+
+    // int i;
+    // for (i = 0; i < 6; i++)
+    // {
+    //   canvas_TFT.drawLine(, , , , TFT_WHITE);
+    // }
+
+    canvas_TFT.setTextSize(1);
+    canvas_TFT.drawNumber(DEWPOINT, 56, 80);
+
+    canvas_TFT.drawString("C", 68, 80);
     condition++;
     break;
   case 2:
+    canvas_TFT.fillScreen(TFT_BLACK);
+    canvas_TFT.setTextDatum(0);
+    canvas_TFT.setTextSize(1);
+    canvas_TFT.setTextColor(TFT_RED);
+    canvas_TFT.drawString("Humidity", 40, 10, 2);
+
+    canvas_TFT.drawCircle(64, 74, 40, TFT_WHITE);
+    canvas_TFT.fillCircle(64, 74, 10 + (int)(HUMIDITY * 0.3), TFT_BLUE);
+    canvas_TFT.fillCircle(64, 74, 10, TFT_BLACK);
+    canvas_TFT.drawCircle(64, 74, 10, TFT_WHITE);
+    int i;
+    for (i = 0; i < 6; i++)
+    {
+      canvas_TFT.drawLine(62, 34 + (i * 6), 66, 34 + (i * 6), TFT_WHITE);
+    }
+    canvas_TFT.setCursor(64, 64);
+    canvas_TFT.drawNumber(HUMIDITY, 56, 70);
+    canvas_TFT.drawString("%", 68, 70);
     condition = 0; // On revient à 0 à partir de ce moment
     break;
 
