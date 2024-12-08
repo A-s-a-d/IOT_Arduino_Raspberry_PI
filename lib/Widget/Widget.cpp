@@ -134,7 +134,7 @@ void Gauge_Dewpoint ::draw()
 {
     _canvas->fillScreen(0);
     _drawBackground();
-    _drawlux();
+    _drawDewpoint();
 }
 
 void Gauge_Dewpoint ::_drawDewpoint()
