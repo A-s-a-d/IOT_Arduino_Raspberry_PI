@@ -105,7 +105,7 @@ GFXcanvas1 canvas(SCREEN_WIDTH, SCREEN_HEIGHT);
 Gauge gauge(&canvas, 64, 64, 60);
 Gauge_LUX gauge_lux(&canvas);
 Gauge_hum gauge_hum(&canvas);
-
+ 
 TFT_eSPI tft = TFT_eSPI(SCREEN_WIDTH_RGB, SCREEN_HEIGHT_RGB);
 TFT_eSprite canvas_TFT = TFT_eSprite(&tft);
 
