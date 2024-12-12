@@ -99,13 +99,13 @@ float Gauge ::_calculY(float rayon, float angle)
     return _centerY + (rayon * sin(angle));
 }
 
-Gauge_LUX::Gauge_LUX(GFXcanvas1 *pcanvas)
+Gauge_Dewpoint::Gauge_Dewpoint(GFXcanvas1 *pcanvas)
 {
-    _lux = 0;
+    _Dewpoint = 0;
     _canvas = pcanvas;
 }
 
-void Gauge_LUX ::_drawBackground()
+void Gauge_Dewpoint ::_drawBackground()
 {
     _canvas->setCursor(43, 0);
     _canvas->setTextSize(1);
@@ -130,19 +130,19 @@ void Gauge_LUX ::_drawBackground()
     _canvas->setRotation(0);
 }
 
-void Gauge_LUX ::draw()
+void Gauge_Dewpoint ::draw()
 {
     _canvas->fillScreen(0);
     _drawBackground();
-    _drawlux();
+    _drawDewpoint();
 }
 
-void Gauge_LUX ::_drawlux()
+void Gauge_Dewpoint ::_drawDewpoint()
 {
     float hum = 0;
     hum = DEWPOINT;
 
-    int longueur = (index_pixel_lux)*hum;
+    int longueur = (index_pixel_Dewpoint)*hum;
 
     _canvas->fillRect(9, 10, longueur, 15, WHITE);
 

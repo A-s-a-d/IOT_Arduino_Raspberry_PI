@@ -14,9 +14,9 @@ extern float TEMPERATURE;
 extern float HUMIDITY;
 extern float DEWPOINT;
 
-#define MAX_LUX 3000
-#define longueur_gauge_lux 110
-#define index_pixel_lux 2.2 // longeur_gauge_lux / MAX_LUX
+#define MAX_Dewpoint 3000
+#define longueur_gauge_Dewpoint 110
+#define index_pixel_Dewpoint 2.2 // longeur_gauge_lux / MAX_LUX
 #define index_pixel_hum 1             // longeur_gauge_lux / MAX_LUX
 
 
@@ -44,19 +44,19 @@ private:
 };
 
 //*********************
-// gauge widget temperature
+//  widget Dewpoint 
 //*********************
-class Gauge_LUX
+class Gauge_Dewpoint
 {
 public:
     // constructor
-    Gauge_LUX(GFXcanvas1 *pcanvas);
+    Gauge_Dewpoint(GFXcanvas1 *pcanvas);
     void draw();
 
 private:
     void _drawBackground();
-    void _drawlux();
-    float _lux;
+    void _drawDewpoint();
+    float _Dewpoint;
     GFXcanvas1 *_canvas;
 };
 
