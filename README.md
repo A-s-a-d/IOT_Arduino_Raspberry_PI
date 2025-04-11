@@ -1,5 +1,4 @@
 # Internet des objets (IOT) version Arduino Uno R4 Wi-Fi BUT3-S5 ESE R5-10 ESE 
-## A. DeCarvalho
 
 ## Outils : 
 - Visual Studio Code
